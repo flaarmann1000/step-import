@@ -163,8 +163,8 @@ if uploaded_file is not None:
             st.success("Input geometry with layers rendered successfully!")
             # Convex Hull Calculation
             st.subheader("Convex Hull Calculation")
-                if len(input_vertices) >= 3:  # Convex hull requires at least 3 points
-                    hull = ConvexHull(input_vertices, qhull_options="Qt Qf")  # Handle planar surfaces with QJ option
+            if len(input_vertices) >= 3:  # Convex hull requires at least 3 points
+                hull = ConvexHull(input_vertices, qhull_options="Qt Qf")  # Handle planar surfaces with QJ option
 
                     # Remap hull.simplices indices to match hull_points
                     hull_indices = {index: i for i, index in enumerate(hull.vertices)}
