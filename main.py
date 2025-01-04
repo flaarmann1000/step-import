@@ -5,7 +5,7 @@ from OCC.Core.TopoDS import topods
 from OCC.Core.BRep import BRep_Tool
 from OCC.Core.TopLoc import TopLoc_Location
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
-from OCC.Core.TCollection import TCollection_AsciiString
+from OCC.Core.TCollection import TCollection_ExtendedString
 from OCC.Core.TDataStd import TDataStd_Name
 from OCC.Core.XCAFDoc import XCAFDoc_DocumentTool, XCAFDoc_ShapeTool
 from OCC.Core.TDF import TDF_LabelSequence
@@ -36,7 +36,7 @@ if uploaded_file is not None:
         st.info(f"Temporary file saved at: {step_file_path}")
 
         # Initialize document and reader
-        doc = TDocStd_Document(TCollection_AsciiString("pythonocc-doc"))
+        doc = TDocStd_Document(TCollection_ExtendedString("pythonocc-doc"))
         step_reader = STEPCAFControl_Reader()
         
         # Read and transfer
