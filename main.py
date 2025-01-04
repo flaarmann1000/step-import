@@ -135,7 +135,8 @@ if uploaded_file is not None:
             st.subheader("Interactive Visualization with Layers")
 
             # Create PyVista plotter
-            plotter = pv.Plotter(window_size=(800, 600))
+            plotter = pv.Plotter(notebook=True)
+            plotter.window_size = [800, 600]
 
             # Process each layer
             unique_layers = list(set(all_layers))
@@ -158,14 +159,10 @@ if uploaded_file is not None:
                                      label=layer)
 
             plotter.add_legend()
-
-            # Use static renderer
-            plotter.show(jupyter_backend='static')
-            img = plotter.screenshot()
-            plotter.close()
-
+            plotter.background_color = 'white'
+            
             # Display in Streamlit
-            st.image(img, use_column_width=True)
+            st.plotly_chart(plotter.to_html())
 
             st.success("Input geometry with layers rendered successfully!")
             # Convex Hull Calculation
@@ -202,7 +199,8 @@ if uploaded_file is not None:
 
                 # Render the convex hull
                 st.subheader("Interactive Convex Hull Visualization")
-                hull_plotter = pv.Plotter(window_size=(800, 600))
+                hull_plotter = pv.Plotter(notebook=True)
+                hull_plotter.window_size = [800, 600]
                 hull_plotter.add_mesh(hull_mesh,
                                       color="green",
                                       opacity=0.5,
@@ -214,13 +212,10 @@ if uploaded_file is not None:
                                         point_size=12,
                                         render_points_as_spheres=True)
 
-                # Use static renderer for convex hull
-                hull_plotter.show(jupyter_backend='static')
-                hull_img = hull_plotter.screenshot()
-                hull_plotter.close()
-
+                hull_plotter.background_color = 'white'
+                
                 # Display in Streamlit
-                st.image(hull_img, use_column_width=True)
+                st.plotly_chart(hull_plotter.to_html())
 
                 st.success(
                     "Convex hull calculated and visualized successfully!")
