@@ -118,21 +118,16 @@ if uploaded_file is not None:
                     # Get layer tool
                     layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
                     if layer_tool is not None:
-                        layers = TDF_LabelSequence()
-                        layer_tool.GetLayers(layers)
+                        # Get layers for the current shape
+                        layer_labels = TDF_LabelSequence()
+                        layer_tool.GetLayers(current_shape, layer_labels)
                         
-                        # Check each layer to see if it contains our shape
-                        for i in range(1, layers.Length() + 1):
-                            layer_label = layers.Value(i)
-                            shapes = TDF_LabelSequence()
-                            layer_tool.GetShapesOfLayer(layer_label, shapes)
-                            
-                            for j in range(1, shapes.Length() + 1):
-                                if shapes.Value(j).IsEqual(current_label):
-                                    name_attr = TDataStd_Name()
-                                    if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
-                                        layer_name = name_attr.Get().ToExtString()
-                                        break
+                        # Get the first layer name if available
+                        if layer_labels.Length() > 0:
+                            layer_label = layer_labels.Value(1)
+                            name_attr = TDataStd_Name()
+                            if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                                layer_name = name_attr.Get().ToExtString()
                     
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
