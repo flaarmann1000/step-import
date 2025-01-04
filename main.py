@@ -161,8 +161,12 @@ if uploaded_file is not None:
             plotter.add_legend()
             plotter.background_color = 'white'
             
-            # Display in Streamlit
-            st.plotly_chart(plotter.to_html())
+            # Export to HTML and display in Streamlit
+            temp_html = plotter.export_html('temp.html')
+            with open('temp.html', 'r') as f:
+                html_content = f.read()
+            st.components.v1.html(html_content, height=600)
+            plotter.close()
 
             st.success("Input geometry with layers rendered successfully!")
             # Convex Hull Calculation
@@ -214,8 +218,12 @@ if uploaded_file is not None:
 
                 hull_plotter.background_color = 'white'
                 
-                # Display in Streamlit
-                st.plotly_chart(hull_plotter.to_html())
+                # Export to HTML and display in Streamlit
+                temp_html = hull_plotter.export_html('temp_hull.html')
+                with open('temp_hull.html', 'r') as f:
+                    html_content = f.read()
+                st.components.v1.html(html_content, height=600)
+                hull_plotter.close()
 
                 st.success(
                     "Convex hull calculated and visualized successfully!")
