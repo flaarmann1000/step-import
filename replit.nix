@@ -1,6 +1,7 @@
 
 { pkgs }: {
   deps = [
+    pkgs.swig4
     pkgs.opencascade-occt
     pkgs.swig
     pkgs.python312
