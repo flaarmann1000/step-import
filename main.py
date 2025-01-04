@@ -135,7 +135,7 @@ if uploaded_file is not None:
             st.subheader("Interactive Visualization with Layers")
 
             # Create PyVista plotter
-            plotter = pv.Plotter(notebook=True)
+            plotter = pv.Plotter(off_screen=True)
             plotter.window_size = [800, 600]
 
             # Process each layer
@@ -201,7 +201,7 @@ if uploaded_file is not None:
 
                 # Render the convex hull
                 st.subheader("Interactive Convex Hull Visualization")
-                hull_plotter = pv.Plotter(notebook=True)
+                hull_plotter = pv.Plotter(off_screen=True)
                 hull_plotter.window_size = [800, 600]
                 hull_plotter.add_mesh(hull_mesh,
                                       color="green",
