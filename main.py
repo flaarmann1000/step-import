@@ -1,5 +1,3 @@
-from OCC.Core.TColStd import TColStd_HSequenceOfExtendedString
-
 import streamlit as st
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_FACE
@@ -14,6 +12,7 @@ from OCC.Core.TDF import TDF_LabelSequence
 from OCC.Core.STEPCAFControl import STEPCAFControl_Reader
 from OCC.Core.TDocStd import TDocStd_Document
 import matplotlib.pyplot as plt
+import colorsys
 
 import pyvista as pv
 import numpy as np
@@ -113,32 +112,8 @@ if uploaded_file is not None:
                     all_input_vertices.append(face_vertices)
                     all_input_faces.append(np.array(face_faces))
 
-                    # Get layer name from presentation layer
-                    layer_name = "Default"
-
-                    # Get layer tool
-                    layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
-                    if layer_tool is not None:
-                        layers = TDF_LabelSequence()
-                        layer_tool.GetLayerLabels(layers)
-
-                        for i in range(1, layers.Length() + 1):
-                            layer_label = layers.Value(i)
-                            shapes = TDF_LabelSequence()
-                            layer_tool.GetShapesOfLayer(layer_label, shapes)
-
-                            from OCC.Core.TDataStd import TDataStd_Name
-                            name_attr = TDataStd_Name()
-                            if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
-                                try:
-                                    name_handle = name_attr.Get()
-                                    if name_handle:
-                                        layer_name = name_handle.ToExtString()
-                                        break
-                                except:
-                                    pass
-
-                    # Store layer information
+                    # Simplified layer handling - just use shape index and face count
+                    layer_name = f"Shape_{shape_idx}_Face_{face_count}"
                     all_layers.extend([layer_name] * len(face_faces))
                     total_vertex_offset += len(face_vertices)
 
