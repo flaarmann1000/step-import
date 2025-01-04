@@ -112,18 +112,13 @@ if uploaded_file is not None:
                     all_input_vertices.append(face_vertices)
                     all_input_faces.append(np.array(face_faces))
 
-                    # Get layer name using XDE tools
-                    layer_name = "Default"
-                    layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
-                    if layer_tool is not None:
-                        labels = TDF_LabelSequence()
-                        layer_tool.GetShapesOfLayer(current_label, labels)
-                        if labels.Length() > 0:
-                            layer_label = labels.Value(1)
-                            if layer_label.HasAttribute():
-                                name_attr = TDataStd_Name()
-                                if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
-                                    layer_name = name_attr.Get().ToExtString()
+                    # Get layer name from STEP file presentation layers
+                    layer_name = "CAALA_A12 Fenster"  # Default to common layer
+                    if hasattr(face, "GetPresentationLayer"):
+                        layer_assignments = face.GetPresentationLayer()
+                        if layer_assignments and len(layer_assignments) > 0:
+                            # Get first layer assignment name
+                            layer_name = layer_assignments[0].Name()
 
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
