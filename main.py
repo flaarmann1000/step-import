@@ -152,14 +152,13 @@ if uploaded_file is not None:
             
             plotter.add_legend()
             
-            # Export visualization
-            html_path = os.path.join(tempfile.gettempdir(), "geometry_layers.html")
-            plotter.export_html(html_path)
+            # Use static renderer
+            plotter.show(jupyter_backend='static')
+            img = plotter.screenshot()
             plotter.close()
             
             # Display in Streamlit
-            with open(html_path, "r") as f:
-                st.components.v1.html(f.read(), height=600)
+            st.image(img, use_column_width=True)
                 
                 st.success("Input geometry with layers rendered successfully!")
                   # Convex Hull Calculation
@@ -196,14 +195,13 @@ if uploaded_file is not None:
                     # Add convex hull vertices as points
                     hull_plotter.add_points(hull_points, color="blue", point_size=12, render_points_as_spheres=True)
 
-                    # Export convex hull visualization to HTML
-                    hull_html_path = os.path.join(tempfile.gettempdir(), "convex_hull.html")
-                    hull_plotter.export_html(hull_html_path)
+                    # Use static renderer for convex hull
+                    hull_plotter.show(jupyter_backend='static')
+                    hull_img = hull_plotter.screenshot()
                     hull_plotter.close()
 
-                    # Embed the convex hull visualization in Streamlit
-                    with open(hull_html_path, "r") as f:
-                        st.components.v1.html(f.read(), height=600)
+                    # Display in Streamlit
+                    st.image(hull_img, use_column_width=True)
 
                     st.success("Convex hull calculated and visualized successfully!")
                 else:
