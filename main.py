@@ -112,22 +112,27 @@ if uploaded_file is not None:
                     all_input_vertices.append(face_vertices)
                     all_input_faces.append(np.array(face_faces))
 
-                    # Get layer name from shape properties
+                    # Get layer name from presentation layer
                     layer_name = "Default"
                     
-                    # Try to get layer from shape
-                    shape_properties = shape_tool.GetShapeProperties(current_label)
-                    if shape_properties:
-                        # Check if this shape has a layer assigned
-                        layer_refs = TDF_LabelSequence()
-                        shape_tool.GetLayers(current_label, layer_refs)
+                    # Get layer tool
+                    layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
+                    if layer_tool is not None:
+                        layers = TDF_LabelSequence()
+                        layer_tool.GetLayers(layers)
                         
-                        if layer_refs.Length() > 0:
-                            layer_label = layer_refs.Value(1)
-                            if layer_label.HasAttribute():
-                                name_attr = TDataStd_Name()
-                                if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
-                                    layer_name = name_attr.Get().ToExtString()
+                        # Check each layer to see if it contains our shape
+                        for i in range(1, layers.Length() + 1):
+                            layer_label = layers.Value(i)
+                            shapes = TDF_LabelSequence()
+                            layer_tool.GetShapesOfLayer(layer_label, shapes)
+                            
+                            for j in range(1, shapes.Length() + 1):
+                                if shapes.Value(j).IsEqual(current_label):
+                                    name_attr = TDataStd_Name()
+                                    if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                                        layer_name = name_attr.Get().ToExtString()
+                                        break
                     
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
