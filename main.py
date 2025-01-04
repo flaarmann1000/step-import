@@ -1,4 +1,3 @@
-
 from OCC.Core.TColStd import TColStd_HSequenceOfExtendedString
 
 import streamlit as st
@@ -122,6 +121,8 @@ if uploaded_file is not None:
                     if layer_tool is not None:
                         # Get all layers that contain this shape
                         layer_names = TColStd_HSequenceOfExtendedString()
+                        st.info(
+                            f"layer_names.Length(): {layer_names.Length()}")
                         if layer_tool.GetLayers(current_shape, layer_names):
                             if layer_names.Length() > 0:
                                 layer_name = layer_names.Value(1)
