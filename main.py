@@ -116,16 +116,21 @@ if uploaded_file is not None:
                     # Get layer name from presentation layer
                     layer_name = "Default"
 
-                    # Get layer tool and shape tool
+                    # Get layer tool
                     layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
                     if layer_tool is not None:
-                        # Get all layers that contain this shape
-                        layer_names = TColStd_HSequenceOfExtendedString()
-                        st.info(
-                            f"layer_names.Length(): {layer_names.Length()}")
-                        if layer_tool.GetLayers(current_shape, layer_names):
-                            if layer_names.Length() > 0:
-                                layer_name = layer_names.Value(1)
+                        layers = TDF_LabelSequence()
+                        layer_tool.GetLayerLabels(layers)
+                        
+                        for i in range(1, layers.Length() + 1):
+                            layer_label = layers.Value(i)
+                            shapes = TDF_LabelSequence()
+                            layer_tool.GetShapesOfLayer(layer_label, shapes)
+                            
+                            name_attr = TDataStd_Name()
+                            if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                                layer_name = name_attr.Get().ToExtString()
+                                break
 
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
