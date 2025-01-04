@@ -112,8 +112,20 @@ if uploaded_file is not None:
                     all_input_vertices.append(face_vertices)
                     all_input_faces.append(np.array(face_faces))
 
-                    # Simplified layer handling - just use shape index and face count
-                    layer_name = f"Shape_{shape_idx}_Face_{face_count}"
+                    # Get layer name using XDE tools
+                    layer_name = "Default"
+                    layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
+                    if layer_tool is not None:
+                        labels = TDF_LabelSequence()
+                        layer_tool.GetShapesOfLayer(current_label, labels)
+                        if labels.Length() > 0:
+                            layer_label = labels.Value(1)
+                            if layer_label.HasAttribute():
+                                name_attr = TDataStd_Name()
+                                if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                                    layer_name = name_attr.Get().ToExtString()
+
+                    # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
                     total_vertex_offset += len(face_vertices)
 
@@ -160,7 +172,7 @@ if uploaded_file is not None:
 
             plotter.add_legend()
             plotter.background_color = 'white'
-            
+
             # Render to image and display in Streamlit
             plotter.show(screenshot='temp.png')
             st.image('temp.png', use_column_width=True)
@@ -215,7 +227,7 @@ if uploaded_file is not None:
                                         render_points_as_spheres=True)
 
                 hull_plotter.background_color = 'white'
-                
+
                 # Render to image and display in Streamlit
                 hull_plotter.show(screenshot='temp_hull.png')
                 st.image('temp_hull.png', use_column_width=True)
