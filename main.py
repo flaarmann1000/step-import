@@ -12,7 +12,6 @@ from OCC.Core.TDF import TDF_LabelSequence
 from OCC.Core.STEPCAFControl import STEPCAFControl_Reader
 from OCC.Core.TDocStd import TDocStd_Document
 import matplotlib.pyplot as plt
-import colorsys
 
 import pyvista as pv
 import numpy as np
@@ -114,21 +113,27 @@ if uploaded_file is not None:
 
                     # Get layer name from presentation layer
                     layer_name = "Default"
-                    
+
                     # Get layer tool
                     layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
                     if layer_tool is not None:
                         # Get layers for the current shape
                         layer_labels = TDF_LabelSequence()
                         layer_tool.GetLayers(current_shape, layer_labels)
-                        
+
+                        st.write(
+                            f"layer_labels.Length() = {layer_labels.Length()}")
+
                         # Get the first layer name if available
                         if layer_labels.Length() > 0:
+
                             layer_label = layer_labels.Value(1)
+                            st.write(f"{layer_label}")
                             name_attr = TDataStd_Name()
-                            if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                            if layer_label.FindAttribute(
+                                    TDataStd_Name.GetID(), name_attr):
                                 layer_name = name_attr.Get().ToExtString()
-                    
+
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
                     total_vertex_offset += len(face_vertices)
@@ -179,7 +184,7 @@ if uploaded_file is not None:
 
             # Render to image and display in Streamlit
             plotter.show(screenshot='temp.png')
-            st.image('temp.png', use_column_width=True)
+            st.image('temp.png', use_container_width=True)
             plotter.close()
 
             st.success("Input geometry with layers rendered successfully!")
@@ -234,7 +239,7 @@ if uploaded_file is not None:
 
                 # Render to image and display in Streamlit
                 hull_plotter.show(screenshot='temp_hull.png')
-                st.image('temp_hull.png', use_column_width=True)
+                st.image('temp_hull.png', use_container_width=True)
                 hull_plotter.close()
 
                 st.success(
