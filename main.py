@@ -112,14 +112,23 @@ if uploaded_file is not None:
                     all_input_vertices.append(face_vertices)
                     all_input_faces.append(np.array(face_faces))
 
-                    # Get layer name from STEP file presentation layers
-                    layer_name = "CAALA_A12 Fenster"  # Default to common layer
-                    if hasattr(face, "GetPresentationLayer"):
-                        layer_assignments = face.GetPresentationLayer()
-                        if layer_assignments and len(layer_assignments) > 0:
-                            # Get first layer assignment name
-                            layer_name = layer_assignments[0].Name()
-
+                    # Get layer name from shape properties
+                    layer_name = "Default"
+                    
+                    # Try to get layer from shape
+                    shape_properties = shape_tool.GetShapeProperties(current_label)
+                    if shape_properties:
+                        # Check if this shape has a layer assigned
+                        layer_refs = TDF_LabelSequence()
+                        shape_tool.GetLayers(current_label, layer_refs)
+                        
+                        if layer_refs.Length() > 0:
+                            layer_label = layer_refs.Value(1)
+                            if layer_label.HasAttribute():
+                                name_attr = TDataStd_Name()
+                                if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
+                                    layer_name = name_attr.Get().ToExtString()
+                    
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
                     total_vertex_offset += len(face_vertices)
