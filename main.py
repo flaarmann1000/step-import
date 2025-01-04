@@ -36,7 +36,7 @@ if uploaded_file is not None:
         st.info(f"Temporary file saved at: {step_file_path}")
 
         # Initialize document and reader
-        doc = TDocStd_Document("pythonocc-doc")
+        doc = TDocStd_Document(TCollection_AsciiString("pythonocc-doc"))
         step_reader = STEPCAFControl_Reader()
         
         # Read and transfer
