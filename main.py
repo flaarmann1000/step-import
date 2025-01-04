@@ -1,3 +1,6 @@
+
+from OCC.Core.TColStd import TColStd_HSequenceOfExtendedString
+
 import streamlit as st
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_FACE
@@ -114,37 +117,14 @@ if uploaded_file is not None:
                     # Get layer name from presentation layer
                     layer_name = "Default"
 
-                    # Get layer tool
+                    # Get layer tool and shape tool
                     layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
                     if layer_tool is not None:
-                        layers = TDF_LabelSequence()
-                        layer_tool.GetLayerLabels(layers)
-                        for i in range(1, layers.Length() + 1):
-                            current_layer = layers.Value(i)
-                            shapes = TDF_LabelSequence()
-                            layer_tool.GetShapesOfLayer(current_layer, shapes)
-
-                            for j in range(1, shapes.Length() + 1):
-                                # st.write(
-                                #     f"working on shape {shapes.Value(j)} with current_label {current_label}"
-                                # )
-                                if shapes.Value(j).IsEqual(current_label):
-                                    name_attr = TDataStd_Name()
-                                    st.write(
-                                        "shapes.Value(j).IsEqual(current_label)"
-                                    )
-                                    if current_layer.FindAttribute(
-                                            TDataStd_Name.GetID(), name_attr):
-                                        st.write(
-                                            f"could find layer name for {current_layer}"
-                                        )
-                                        layer_name = name_attr.Get(
-                                        ).ToExtString()
-                                        break
-                                    else:
-                                        st.write(
-                                            f"could not find layer name for {current_layer}"
-                                        )
+                        # Get all layers that contain this shape
+                        layer_names = TColStd_HSequenceOfExtendedString()
+                        if layer_tool.GetLayers(current_shape, layer_names):
+                            if layer_names.Length() > 0:
+                                layer_name = layer_names.Value(1)
 
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
