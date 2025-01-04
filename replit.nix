@@ -21,6 +21,9 @@
     pkgs.libGL
     pkgs.freetype
     pkgs.freefont_ttf
+    pkgs.xorg.libX11
+    pkgs.xorg.libXrender
+    pkgs.xorg.libXext
     pkgs.xsimd
     pkgs.pkg-config
     pkgs.libxcrypt
