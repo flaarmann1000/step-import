@@ -113,24 +113,38 @@ if uploaded_file is not None:
 
                     # Get layer name from presentation layer
                     layer_name = "Default"
-                    
+
                     # Get layer tool
                     layer_tool = XCAFDoc_DocumentTool.LayerTool(doc.Main())
                     if layer_tool is not None:
                         layers = TDF_LabelSequence()
                         layer_tool.GetLayerLabels(layers)
-                        
                         for i in range(1, layers.Length() + 1):
                             current_layer = layers.Value(i)
                             shapes = TDF_LabelSequence()
                             layer_tool.GetShapesOfLayer(current_layer, shapes)
-                            
+
                             for j in range(1, shapes.Length() + 1):
+                                # st.write(
+                                #     f"working on shape {shapes.Value(j)} with current_label {current_label}"
+                                # )
                                 if shapes.Value(j).IsEqual(current_label):
                                     name_attr = TDataStd_Name()
-                                    if current_layer.FindAttribute(TDataStd_Name.GetID(), name_attr):
-                                        layer_name = name_attr.Get().ToExtString()
+                                    st.write(
+                                        "shapes.Value(j).IsEqual(current_label)"
+                                    )
+                                    if current_layer.FindAttribute(
+                                            TDataStd_Name.GetID(), name_attr):
+                                        st.write(
+                                            f"could find layer name for {current_layer}"
+                                        )
+                                        layer_name = name_attr.Get(
+                                        ).ToExtString()
                                         break
+                                    else:
+                                        st.write(
+                                            f"could not find layer name for {current_layer}"
+                                        )
 
                     # Store layer information
                     all_layers.extend([layer_name] * len(face_faces))
