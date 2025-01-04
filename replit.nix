@@ -1,7 +1,11 @@
 
 { pkgs }: {
   deps = [
-    pkgs.swig4
+    pkgs.opencascade-occt
+    pkgs.swig
+    pkgs.python312
+    pkgs.python312Packages.pip
+    pkgs.python312Packages.pythonocc-core
     pkgs.rapidjson
     pkgs.fontconfig
     pkgs.tk
@@ -12,8 +16,6 @@
     pkgs.ghostscript
     pkgs.ffmpeg-full
     pkgs.cairo
-    pkgs.swig
-    pkgs.opencascade-occt
     pkgs.libGLU
     pkgs.libGL
     pkgs.freetype
@@ -21,8 +23,5 @@
     pkgs.xsimd
     pkgs.pkg-config
     pkgs.libxcrypt
-    pkgs.python312
-    pkgs.python312Packages.pip
-    pkgs.python312Packages.setuptools
   ];
 }
