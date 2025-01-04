@@ -161,11 +161,9 @@ if uploaded_file is not None:
             plotter.add_legend()
             plotter.background_color = 'white'
             
-            # Export to HTML and display in Streamlit
-            temp_html = plotter.export_html('temp.html')
-            with open('temp.html', 'r') as f:
-                html_content = f.read()
-            st.components.v1.html(html_content, height=600)
+            # Render to image and display in Streamlit
+            plotter.show(screenshot='temp.png')
+            st.image('temp.png', use_column_width=True)
             plotter.close()
 
             st.success("Input geometry with layers rendered successfully!")
@@ -218,11 +216,9 @@ if uploaded_file is not None:
 
                 hull_plotter.background_color = 'white'
                 
-                # Export to HTML and display in Streamlit
-                temp_html = hull_plotter.export_html('temp_hull.html')
-                with open('temp_hull.html', 'r') as f:
-                    html_content = f.read()
-                st.components.v1.html(html_content, height=600)
+                # Render to image and display in Streamlit
+                hull_plotter.show(screenshot='temp_hull.png')
+                st.image('temp_hull.png', use_column_width=True)
                 hull_plotter.close()
 
                 st.success(
