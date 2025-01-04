@@ -121,19 +121,19 @@ if uploaded_file is not None:
                     if layer_tool is not None:
                         layers = TDF_LabelSequence()
                         layer_tool.GetLayerLabels(layers)
-                        
+
                         for i in range(1, layers.Length() + 1):
                             layer_label = layers.Value(i)
                             shapes = TDF_LabelSequence()
                             layer_tool.GetShapesOfLayer(layer_label, shapes)
-                            
-                            from OCC.Core.Handle import Handle_TDataStd_Name
-                            name_attr = Handle_TDataStd_Name()
+
+                            from OCC.Core.TDataStd import TDataStd_Name
+                            name_attr = TDataStd_Name()
                             if layer_label.FindAttribute(TDataStd_Name.GetID(), name_attr):
                                 try:
-                                    name_handle = name_attr.GetObject()
+                                    name_handle = name_attr.Get()
                                     if name_handle:
-                                        layer_name = name_handle.Get().ToExtString()
+                                        layer_name = name_handle.ToExtString()
                                         break
                                 except:
                                     pass
